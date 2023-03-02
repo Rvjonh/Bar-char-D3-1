@@ -4,6 +4,7 @@ window.addEventListener("DOMContentLoaded", main)
 const URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json";
 
 function main() {
+    /* Fetch the data and execute drawBarChar */
     fetch(URL).then(r => r.json())
         .then((r) => {
             drawBarChar(r.data)
@@ -11,14 +12,17 @@ function main() {
 }
 
 function drawBarChar(dataset) {
+    /* Variables of size */
     const c = document.getElementById("graph")
     let W = c.clientWidth;
     let H = 500;
     let barWidth = W / 275;
     let P = 50;
 
+    /* Main svg container */
     const svg = d3.select("#graph").append("svg").attr("width", W).attr("height", H)
 
+    /* block to show information */
     const tooltip = d3.select("#graph")
         .append("div")
         .attr('id', 'tooltip')
@@ -28,7 +32,7 @@ function drawBarChar(dataset) {
         .style('position', 'absolute')
         .style('opacity', 0)
         .style('font-size', '18px')
-
+    /* to show datatime and money quatity */
     const toolTime = d3.select("#tooltip").append("time")
     const toolMoney = d3.select("#tooltip").append("span")
 
@@ -64,6 +68,7 @@ function drawBarChar(dataset) {
         .attr('transform', 'translate(' + P + ', 0)');
 
 
+    /* Scale increase */
     var scaledGDP = [];
     var linearScale = d3.scaleLinear().domain([0, gdpMax]).range([0, H - P]);
 
@@ -71,6 +76,7 @@ function drawBarChar(dataset) {
         return linearScale(item);
     });
 
+    /* draw all rects in the svg */
     svg.selectAll('rect')
         .data(scaledGDP)
         .enter()
